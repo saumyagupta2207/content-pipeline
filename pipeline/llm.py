@@ -11,10 +11,10 @@ def _require(var_name: str) -> None:
         raise RuntimeError(f"{var_name} is missing. Add it to your .env file.")
 
 
-def get_llm():
+def get_llm(model_name: str | None = None):
     """Return a chat model for whichever provider .env selects."""
     provider = os.getenv("LLM_PROVIDER", "gemini")
-    model_name = os.getenv("MODEL_NAME")
+    model_name = model_name or os.getenv("MODEL_NAME")
 
     if provider == "gemini":
         from langchain_google_genai import ChatGoogleGenerativeAI
@@ -33,6 +33,12 @@ def get_llm():
         return ChatAnthropic(model=model_name or "claude-sonnet-5-5", max_tokens=8000)
 
     raise ValueError(f"Unknown LLM_PROVIDER: {provider}. Use 'gemini' or 'anthropic'.")
+
+
+def get_critic_llm():
+    """The judge can use a stronger model than the writer (CRITIC_MODEL in .env)."""
+    return get_llm(os.getenv("CRITIC_MODEL"))
+
 
 def get_crew_llm():
     """Return a CrewAI model for whichever provider .env selects."""
