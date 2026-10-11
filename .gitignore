@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 runs/
 output/
+.pytest_cache/
