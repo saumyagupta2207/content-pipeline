@@ -1,8 +1,10 @@
 from pydantic import BaseModel, Field
+import logging
 
 from pipeline.llm import get_critic_llm, get_llm
 from pipeline.state import ContentState
 from pipeline.publish import save_article
+logger = logging.getLogger(__name__)
 
 MAX_LOOPS = 3     # most drafts we'll ever write
 PASS_SCORE = 8    # score needed to publish without a flag
@@ -91,10 +93,17 @@ Research the article should be based on:
 
 Article:
 {state["draft"]}""")
-    print("Problems found:", result.problems)
 
     score = max(1, min(10, result.score))
-    return {"score": score, "feedback": result.feedback}
+    logger.info("Draft %d scored %d/10 (%d problems)", state["loops"], score, len(result.problems))
+    for problem in result.problems:
+        logger.debug("  problem: %s", problem)
+
+    return {
+        "score": score,
+        "feedback": result.feedback,
+        "history": [{"draft": state["loops"], "score": score, "problems": result.problems}],
+    }
 
 def should_revise(state: ContentState) -> str:
     """Decide where to go after critique: 'publish' or 'revise'."""

@@ -1,12 +1,14 @@
-from typing import TypedDict
+import operator
+from typing import Annotated, TypedDict
 
 
 class ContentState(TypedDict):
-    topic: str        # what the article is about (the input)
-    research: str     # findings from the research crew
-    draft: str        # the current article draft
-    score: int        # critic's score out of 10
-    feedback: str     # critic's notes on what to improve
-    loops: int        # how many revision rounds have run
-    flagged: bool     # True if we published only because we hit the loop limit
-    output_path: str  # where the published file was saved
+    topic: str
+    research: str
+    draft: str
+    score: int
+    feedback: str
+    loops: int
+    flagged: bool
+    output_path: str
+    history: Annotated[list, operator.add]  # one entry per critique round
