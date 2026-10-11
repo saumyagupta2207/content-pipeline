@@ -30,7 +30,8 @@ Editor feedback:
 Return only the revised article in Markdown."""
     else:
         prompt = f"""Write a blog article of about 600 words on "{state["topic"]}".
-Use only facts from this research:
+Directly explain the topic. Do not change or broaden it.
+Use only facts from this research, explained in your own words (do not quote it):
 {state["research"]}
 
 Return only the article in Markdown."""
@@ -38,15 +39,19 @@ Return only the article in Markdown."""
     response = llm.invoke(prompt)
     return {"draft": response.text, "loops": state["loops"] + 1}
 
-RUBRIC = """Start at 10 and deduct points:
+RUBRIC = """First check: does the article directly explain the topic "{topic}"?
+If it avoids the topic, changes it, or only covers it loosely, the score is AT MOST 3,
+regardless of writing quality.
+
+Otherwise start at 10 and deduct points:
 - Generic or cliche opening (e.g. "The world of X is rapidly evolving"): -2
 - Any claim NOT supported by the research: -3 each
 - Filler sentences that add no information: -1 each (max -3)
+- Quoting the research word-for-word instead of explaining in own words: -1
 - No clear conclusion or takeaway: -1
 - Weak structure (no headings, rambling paragraphs): -1
 A 9 or 10 should be rare: publish-ready with nothing worth changing.
 Feedback must list specific changes, not praise."""
-
 
 def critique_node(state: ContentState) -> dict:
     """Score the draft against the rubric and explain what to fix."""
@@ -55,7 +60,7 @@ def critique_node(state: ContentState) -> dict:
     )
 
     result = critic.invoke(f"""You are a strict editor.
-{RUBRIC}
+{RUBRIC.format(topic=state["topic"])}
 
 Research the article should be based on:
 {state["research"]}
