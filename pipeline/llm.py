@@ -33,3 +33,28 @@ def get_llm():
         return ChatAnthropic(model=model_name or "claude-sonnet-5-5", max_tokens=8000)
 
     raise ValueError(f"Unknown LLM_PROVIDER: {provider}. Use 'gemini' or 'anthropic'.")
+
+def get_crew_llm():
+    """Return a CrewAI model for whichever provider .env selects."""
+    from crewai import LLM
+
+    provider = os.getenv("LLM_PROVIDER", "gemini")
+    model_name = os.getenv("MODEL_NAME")
+
+    if provider == "anthropic":
+        _require("ANTHROPIC_API_KEY")
+        return LLM(
+            model=f"anthropic/{model_name or 'claude-sonnet-5-5'}",
+            api_key=os.getenv("ANTHROPIC_API_KEY"),
+            max_tokens=4000,
+        )
+
+    if provider == "gemini":
+        _require("GOOGLE_API_KEY")
+        return LLM(
+            model=f"gemini/{model_name or 'gemini-2.5-flash'}",
+            api_key=os.getenv("GOOGLE_API_KEY"),
+            max_tokens=8000,
+        )
+
+    raise ValueError(f"Unknown LLM_PROVIDER: {provider}. Use 'gemini' or 'anthropic'.")

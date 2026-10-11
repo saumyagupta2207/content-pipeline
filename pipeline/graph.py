@@ -1,19 +1,13 @@
 from langgraph.graph import END, START, StateGraph
-
+from pipeline.research import run_research
 from pipeline.nodes import critique_node, draft_node, publish_node, should_revise
 from pipeline.state import ContentState
 
-SAMPLE_RESEARCH = (
-    "- AI agents can call tools and take actions, not just answer questions.\n"
-    "- Common failures: looping forever, calling the wrong tool, inventing facts.\n"
-    "- Guardrails include step limits, output validation, and human approval for risky actions.\n"
-    "- Production teams log every agent step so failures can be traced."
-)
 
 
 def research_node(state: ContentState) -> dict:
-    """Placeholder until v0.4, when the CrewAI research crew replaces it."""
-    return {"research": SAMPLE_RESEARCH}
+    """Run the CrewAI research crew and store its brief in the state."""
+    return {"research": run_research(state["topic"])}
 
 
 def build_graph():

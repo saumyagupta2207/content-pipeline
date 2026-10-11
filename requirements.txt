@@ -3,3 +3,4 @@ langgraph==1.2.14
 langchain-anthropic==1.7.5
 python-dotenv==1.2.4
 langchain-google-genai==4.4.1
+ddgs==9.16.0

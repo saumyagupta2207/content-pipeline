@@ -26,12 +26,20 @@ Current draft:
 
 Editor feedback:
 {state["feedback"]}
+Keep following the same rules: stay on topic, facts only from the research, keep the Sources section.
 
 Return only the revised article in Markdown."""
     else:
         prompt = f"""Write a blog article of about 600 words on "{state["topic"]}".
-Directly explain the topic. Do not change or broaden it.
-Use only facts from this research, explained in your own words (do not quote it):
+
+Rules:
+- Directly explain the topic. Do not change or broaden it.
+- Specific facts (numbers, study results, named findings) must come from the research brief.
+- You may explain mechanisms, give illustrative examples and use analogies in your own words.
+- Do not present anything the brief marks as uncertain as settled fact.
+- End with a "## Sources" section listing the URLs you actually used.
+
+Research brief:
 {state["research"]}
 
 Return only the article in Markdown."""
@@ -40,18 +48,24 @@ Return only the article in Markdown."""
     return {"draft": response.text, "loops": state["loops"] + 1}
 
 RUBRIC = """First check: does the article directly explain the topic "{topic}"?
-If it avoids the topic, changes it, or only covers it loosely, the score is AT MOST 3,
-regardless of writing quality.
+If it avoids the topic, changes it, or only covers it loosely, the score is AT MOST 3.
 
 Otherwise start at 10 and deduct points:
-- Generic or cliche opening (e.g. "The world of X is rapidly evolving"): -2
-- Any claim NOT supported by the research: -3 each
+- A specific factual claim (number, study result, named finding, date) that is NOT in
+  the research, or that contradicts it: -3 each
+- Presenting something the research marks as uncertain or unverified as settled fact: -2
+- Generic or cliche opening: -2
 - Filler sentences that add no information: -1 each (max -3)
-- Quoting the research word-for-word instead of explaining in own words: -1
 - No clear conclusion or takeaway: -1
 - Weak structure (no headings, rambling paragraphs): -1
-A 9 or 10 should be rare: publish-ready with nothing worth changing.
-Feedback must list specific changes, not praise."""
+
+Do NOT deduct for:
+- Explaining how something works, illustrative examples, or analogies,
+  as long as they do not introduce new factual claims
+- Reasonable reasoning that connects facts from the research
+
+A 9 or 10 should be rare. Feedback must list specific changes, not praise.
+Never ask for anything that the rules above would penalise."""
 
 def critique_node(state: ContentState) -> dict:
     """Score the draft against the rubric and explain what to fix."""
