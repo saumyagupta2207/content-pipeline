@@ -1,0 +1,61 @@
+{
+  "status": "ok",
+  "error": null,
+  "topic": "How vector databases work",
+  "started_at": "2026-10-11T17:08:26",
+  "total_seconds": 82.6,
+  "model": "claude-haiku-5-5",
+  "critic_model": "claude-sonnet-5-5",
+  "drafts": 2,
+  "scores": [
+    2,
+    9
+  ],
+  "final_score": 9,
+  "flagged": false,
+  "research_chars": 4121,
+  "output_path": "output\\2026-10-11-1709-how-vector-databases-work.md",
+  "steps": [
+    {
+      "node": "researcher",
+      "seconds": 37.6
+    },
+    {
+      "node": "writer",
+      "seconds": 9.6
+    },
+    {
+      "node": "critic",
+      "seconds": 11.7
+    },
+    {
+      "node": "writer",
+      "seconds": 11.7
+    },
+    {
+      "node": "critic",
+      "seconds": 12.0
+    },
+    {
+      "node": "publisher",
+      "seconds": 0.0
+    }
+  ],
+  "history": [
+    {
+      "draft": 1,
+      "score": 2,
+      "problems": [
+        "The article says 'A typical embedding has hundreds or thousands of dimensions'. This is a specific numerical claim that is not in the research (-3).",
+        "The article says 'AI/TLDR describes this trade-off as the central bargain behind practical similarity search'. The research only says ANN trades a little exactness for a large speed gain. It does not say the source frames this as a 'central bargain', so the attribution is invented (-3).",
+        "The article has only a title and a Sources section. Its long body paragraphs have no subheadings to separate embeddings, ANN, HNSW and filtering (-1).",
+        "The closing clause 'which is why vector databases have become central to modern search and AI applications' adds no information from the research. It is a generic filler claim (-1)."
+      ]
+    },
+    {
+      "draft": 2,
+      "score": 9,
+      "problems": []
+    }
+  ]
+}

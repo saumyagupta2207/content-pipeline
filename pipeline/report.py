@@ -11,11 +11,12 @@ RUNS_DIR = Path("runs")
 
 def load_runs() -> list[dict]:
     """Read every JSON run record, oldest first."""
-    return [
-        json.loads(path.read_text(encoding="utf-8"))
-        for path in sorted(RUNS_DIR.glob("*.json"))
-    ]
-
+    runs = []
+    for path in sorted(RUNS_DIR.glob("*.json")):
+        record = json.loads(path.read_text(encoding="utf-8"))
+        record["run_file"] = str(path)
+        runs.append(record)
+    return runs
 
 def pct(part: int, whole: int) -> str:
     return f"{part}/{whole} ({part / whole:.0%})"
@@ -60,6 +61,13 @@ def main() -> None:
     print("\nTime by step:")
     for node, seconds in sorted(totals.items(), key=lambda item: item[1], reverse=True):
         print(f"  {node:<10} {seconds / grand_total:>5.0%}")
+
+    print("\nRuns:")
+    for r in ok:
+        scores = " -> ".join(str(s) for s in r["scores"])
+        print(f"  {scores:<12} {r['topic']}")
+        print(f"               article: {r['output_path']}")
+        print(f"               record:  {r['run_file']}")
 
 
 if __name__ == "__main__":
