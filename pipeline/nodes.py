@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 
 from pipeline.llm import get_critic_llm, get_llm
 from pipeline.state import ContentState
+from pipeline.publish import save_article
 
 MAX_LOOPS = 3     # most drafts we'll ever write
 PASS_SCORE = 8    # score needed to publish without a flag
@@ -105,5 +106,7 @@ def should_revise(state: ContentState) -> str:
 
 
 def publish_node(state: ContentState) -> dict:
-    """Final step. Flag the article if it never reached the pass score."""
-    return {"flagged": state["score"] < PASS_SCORE}
+    """Final step: save the article. Flagged articles go to needs-review."""
+    flagged = state["score"] < PASS_SCORE
+    path = save_article(state, flagged)
+    return {"flagged": flagged, "output_path": path}

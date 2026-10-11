@@ -14,6 +14,7 @@ def main() -> None:
         "feedback": "",
         "loops": 0,
         "flagged": False,
+        "output_path": "",
     }
 
     app = build_graph()
@@ -33,6 +34,7 @@ def main() -> None:
     print(f"Drafts:  {state['loops']}")
     print(f"Score:   {state['score']}/10")
     print(f"Flagged: {state['flagged']}")
+    print(f"Saved:   {state['output_path']}")
     print("=" * 60 + "\n")
     print(state["draft"])
 

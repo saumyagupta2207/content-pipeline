@@ -9,3 +9,4 @@ class ContentState(TypedDict):
     feedback: str     # critic's notes on what to improve
     loops: int        # how many revision rounds have run
     flagged: bool     # True if we published only because we hit the loop limit
+    output_path: str  # where the published file was saved
