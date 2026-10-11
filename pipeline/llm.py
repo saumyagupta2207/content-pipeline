@@ -22,7 +22,7 @@ def get_llm():
         _require("GOOGLE_API_KEY")
         return ChatGoogleGenerativeAI(
             model=model_name or "gemini-2.5-flash",
-            max_output_tokens=2000,
+            max_output_tokens=8000,
             max_retries=3,
         )
 
@@ -30,6 +30,6 @@ def get_llm():
         from langchain_anthropic import ChatAnthropic
 
         _require("ANTHROPIC_API_KEY")
-        return ChatAnthropic(model=model_name or "claude-sonnet-5-5", max_tokens=2000)
+        return ChatAnthropic(model=model_name or "claude-sonnet-5-5", max_tokens=8000)
 
     raise ValueError(f"Unknown LLM_PROVIDER: {provider}. Use 'gemini' or 'anthropic'.")
