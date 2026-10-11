@@ -7,6 +7,10 @@
 
 **An agentic pipeline that researches a topic on the web, writes a cited article, and refuses to publish it until an independent AI critic scores it atleast 8/10, escalating to a human if it can't get there in 3 drafts.**
 
+![Replay of a real run: the research crew gathers sources, the critic scores draft 1 at 2/10 for invented facts, the revision scores 9/10 and is published](docs/demo.gif)
+
+<sub>Replay of a real run, built from <a href="examples/2026-10-11-170949.json">its run record</a>. Full-quality video below.</sub>
+
 | | |
 |---|---|
 | **+3.0 points** | average quality gain when the critic sends a draft back. Best case **2 → 9**, after the critic caught an invented statistic |
